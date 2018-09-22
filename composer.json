@@ -13,5 +13,10 @@
     "psr-4": {
       "N98Hackathon\\Magameto\\": ""
     }
+  },
+  "scripts": {
+    "post-create-project-cmd": [
+      //"php -r \"copy('view/frontend/web/game.html', '');\""
+    ]
   }
 }
