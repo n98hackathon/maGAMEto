@@ -1,0 +1,17 @@
+{
+  "name": "n98/ext.magento2.n98hackathon.magameto",
+  "description": "N/A",
+  "require": {
+    "php": "~7.0.0|~7.1.0"
+  },
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "N98Hackathon\\Magameto\\": ""
+    }
+  }
+}
