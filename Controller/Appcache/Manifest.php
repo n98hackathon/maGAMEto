@@ -36,7 +36,7 @@ class Manifest extends Action
         $page->setHeader('Content-Type', 'text/cache-manifest', true);
 
         $response = $page->setContents('CACHE MANIFEST
-# v0.3 ' . date('Y-m-d', time()) . '
+# v0.4 ' . date('Y-m-d', time()) . '
 
 # Explicitly cached \'master entries\'.
 #CACHE:

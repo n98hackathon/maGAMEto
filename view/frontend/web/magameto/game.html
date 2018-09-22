@@ -35,7 +35,7 @@
         clear : function() {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
-    }
+    };
 
     function component(width, height, color, x, y, type) {
         this.type = type;
@@ -58,20 +58,20 @@
                 ctx.fillStyle = color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
-        }
+        };
         this.newPos = function() {
             this.gravitySpeed += this.gravity;
             this.x += this.speedX;
             this.y += this.speedY + this.gravitySpeed;
             this.hitBottom();
-        }
+        };
         this.hitBottom = function() {
             var rockbottom = myGameArea.canvas.height - this.height;
             if (this.y > rockbottom) {
                 this.y = rockbottom;
                 this.gravitySpeed = 0;
             }
-        }
+        };
         this.crashWith = function(otherobj) {
             var myleft = this.x;
             var myright = this.x + (this.width);
@@ -115,6 +115,9 @@
         }
         myScore.text="SCORE: " + myGameArea.frameNo;
         myScore.update();
+
+        reportGameState();
+
         myGamePiece.newPos();
         myGamePiece.update();
     }
@@ -124,9 +127,20 @@
         return false;
     }
 
-    function accelerate(n) {
-        myGamePiece.gravity = n;
+  function accelerate(n) {
+    myGamePiece.gravity = n;
+  }
+
+  function reportGameState() {
+
+    if(everyinterval(150)) {
+      if (navigator.onLine)
+      {
+        alert('online again!');
+      }
+      console.log('Frame: ' + myGameArea.frameNo + ' Still offline.');
     }
+  }
 </script>
 <br>
 <button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
