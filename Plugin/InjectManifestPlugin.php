@@ -4,6 +4,7 @@ namespace N98Hackathon\Magameto\Plugin;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Page\Config;
+use Magento\Store\Model\StoreManagerInterface;
 
 class InjectManifestPlugin
 {
@@ -12,64 +13,68 @@ class InjectManifestPlugin
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    private $config;
+    protected $config;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * InjectManifestPlugin constructor.
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(ScopeConfigInterface $config)
+    public function __construct(ScopeConfigInterface $config, StoreManagerInterface $storeManager)
     {
         $this->config = $config;
+        $this->storeManager = $storeManager;
     }
 
-
     /**
-     * @param \Magento\Framework\View\Page\Config $subject
+     * @param Config $subject
      * @param string $elementType
      *
      * @return \string[]
      */
     public function aroundGetElementAttributes(Config $subject, callable $proceed, $elementType)
     {
-        if(!$this->isEnabled())
-        {
+        if (!$this->isEnabled()) {
             return $proceed($elementType);
         }
 
-        if($elementType === \Magento\Framework\View\Page\Config::ELEMENT_TYPE_HTML)
-        {
+        if ($elementType === Config::ELEMENT_TYPE_HTML) {
             $orig = $proceed($elementType);
 
-            $manifest = $this->config->getValue(self::CONFIG_PATH_MANIFEST);
+            //$manifest = $this->config->getValue(self::CONFIG_PATH_MANIFEST);
+            $manifest = $this->storeManager->getStore()->getBaseUrl() . 'magameto/appcache/manifest';
             $orig['manifest'] = $manifest;
             
             return $orig;
         }
+
         return $proceed($elementType);
     }
 
     /**
-     * @param \Magento\Framework\View\Page\Config $subject
+     * @param Config $subject
      * @param string $elementType
      *
      * @return \string[]
      */
     public function aroundGetElementAttribute(Config $subject, callable $proceed, $elementType, $attribute)
     {
-        if(!$this->isEnabled())
-        {
+        if (!$this->isEnabled()) {
             return $proceed($elementType, $attribute);
         }
 
-        if($elementType === \Magento\Framework\View\Page\Config::ELEMENT_TYPE_HTML)
-        {
+        if ($elementType === Config::ELEMENT_TYPE_HTML) {
             $orig = $proceed($elementType, $attribute);
 
             $orig[] = 'manifest';
             // Awesome logic
         }
+
         return $proceed($elementType, $attribute);
     }
 
